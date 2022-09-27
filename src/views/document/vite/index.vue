@@ -5,7 +5,9 @@
 </template>
 
 <script setup lang="ts">
-const src = 'https://vitejs.cn/';
+import { ref } from 'vue';
+
+const src = ref('https://cn.vitejs.dev/');
 </script>
 
 <style scoped></style>

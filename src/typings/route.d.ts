@@ -11,6 +11,7 @@ declare namespace AuthRoute {
     | 'not-found'
     | 'no-permission'
     | 'service-error'
+    | 'constant-page'
     | 'not-found-page' // 捕获无效path的路由
     // 自定义路由
     | 'dashboard'
@@ -18,10 +19,10 @@ declare namespace AuthRoute {
     | 'dashboard_workbench'
     | 'document'
     | 'document_vue'
-    | 'document_vue-new'
     | 'document_vite'
     | 'document_naive'
     | 'document_project'
+    | 'document_project-link'
     | 'component'
     | 'component_button'
     | 'component_card'
@@ -95,10 +96,10 @@ declare namespace AuthRoute {
     permissions?: Auth.RoleType[];
     /** 缓存页面 */
     keepAlive?: boolean;
-    /** 菜单和面包屑对应的图标 */
+    /** 菜单和面包屑对应的图标(iconify图标名称) */
     icon?: string;
-    /** 自定义的菜单和面包屑对应的图标 */
-    customIcon?: string;
+    /** 使用本地svg作为的菜单和面包屑对应的图标(assets/svg-icon文件夹的的svg文件名) */
+    localIcon?: string;
     /** 是否在菜单中隐藏(一些列表、表格的详情页面需要通过参数跳转，所以不能显示在菜单中) */
     hide?: boolean;
     /** 外链链接 */

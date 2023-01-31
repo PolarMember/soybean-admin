@@ -1,6 +1,7 @@
 import type { RouteLocationNormalizedLoaded, Router } from 'vue-router';
 import { defineStore } from 'pinia';
 import { useRouterPush } from '@/composables';
+import { localStg } from '@/utils';
 import { useThemeStore } from '../theme';
 import {
   clearTabRoutes,
@@ -8,15 +9,14 @@ import {
   getIndexInTabRoutesByRouteName,
   getTabRouteByVueRoute,
   getTabRoutes,
-  isInTabRoutes,
-  setTabRoutes
+  isInTabRoutes
 } from './helpers';
 
 interface TabState {
   /** 多页签数据 */
-  tabs: GlobalTabRoute[];
+  tabs: App.GlobalTabRoute[];
   /** 多页签首页 */
-  homeTab: GlobalTabRoute;
+  homeTab: App.GlobalTabRoute;
   /** 当前激活状态的页签(路由fullPath) */
   activeTab: string;
 }
@@ -52,7 +52,7 @@ export const useTabStore = defineStore('tab-store', {
     },
     /** 缓存页签路由数据 */
     cacheTabRoutes() {
-      setTabRoutes(this.tabs);
+      localStg.set('multiTabRoutes', this.tabs);
     },
     /**
      * 设置当前路由对应的页签为激活状态
@@ -213,7 +213,7 @@ export const useTabStore = defineStore('tab-store', {
     iniTabStore(currentRoute: RouteLocationNormalizedLoaded) {
       const theme = useThemeStore();
 
-      const tabs: GlobalTabRoute[] = theme.tab.isCache ? getTabRoutes() : [];
+      const tabs: App.GlobalTabRoute[] = theme.tab.isCache ? getTabRoutes() : [];
 
       const hasHome = getIndexInTabRoutesByRouteName(tabs, this.homeTab.name as string) > -1;
       if (!hasHome && this.homeTab.name !== 'root') {

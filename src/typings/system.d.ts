@@ -72,7 +72,7 @@ declare namespace Service {
 
   /** 多个请求数据结果 */
   type MultiRequestResult<T extends any[]> = T extends [infer First, ...infer Rest]
-    ? First extends any
+    ? [First] extends [any]
       ? Rest extends any[]
         ? [Service.RequestResult<First>, ...MultiRequestResult<Rest>]
         : [Service.RequestResult<First>]
@@ -236,6 +236,8 @@ declare namespace Theme {
     fixed: boolean;
     /** 底部高度 */
     height: number;
+    /* 底部是否可见 */
+    visible: boolean;
   }
 
   /** 页面样式 */
@@ -254,42 +256,95 @@ declare namespace Theme {
   }
 }
 
-/** 全局头部属性 */
-interface GlobalHeaderProps {
-  /** 显示logo */
-  showLogo: boolean;
-  /** 显示头部菜单 */
-  showHeaderMenu: boolean;
-  /** 显示菜单折叠按钮 */
-  showMenuCollapse: boolean;
+declare namespace App {
+  /** 全局头部属性 */
+  interface GlobalHeaderProps {
+    /** 显示logo */
+    showLogo: boolean;
+    /** 显示头部菜单 */
+    showHeaderMenu: boolean;
+    /** 显示菜单折叠按钮 */
+    showMenuCollapse: boolean;
+  }
+
+  /** 菜单项配置 */
+  type GlobalMenuOption = import('naive-ui').MenuOption & {
+    key: string;
+    label: string;
+    routeName: string;
+    routePath: string;
+    icon?: () => import('vue').VNodeChild;
+    children?: GlobalMenuOption[];
+  };
+
+  /** 面包屑 */
+  type GlobalBreadcrumb = import('naive-ui').DropdownOption & {
+    key: string;
+    label: string;
+    disabled: boolean;
+    routeName: string;
+    hasChildren: boolean;
+    children?: GlobalBreadcrumb[];
+  };
+
+  /** 多页签Tab的路由 */
+  interface GlobalTabRoute
+    extends Pick<import('vue-router').RouteLocationNormalizedLoaded, 'name' | 'fullPath' | 'meta'> {
+    /** 滚动的位置 */
+    scrollPosition: {
+      left: number;
+      top: number;
+    };
+  }
+
+  interface MessageTab {
+    /** tab的key */
+    key: number;
+    /** tab名称 */
+    name: string;
+    /** badge类型 */
+    badgeProps?: import('naive-ui').BadgeProps;
+    /** 消息数据 */
+    list: MessageList[];
+  }
+
+  interface MessageList {
+    /** 数据唯一值 */
+    id: number;
+    /** 头像 */
+    avatar?: string;
+    /** 消息icon */
+    icon?: string;
+    svgIcon?: string;
+    /** 消息标题 */
+    title: string;
+    /** 消息发送时间 */
+    date?: string;
+    /** 消息是否已读 */
+    isRead?: boolean;
+    /** 消息描述 */
+    description?: string;
+    /** 标签名称 */
+    tagTitle?: string;
+    /** 标签props */
+    tagProps?: import('naive-ui').TagProps;
+  }
 }
 
-/** 菜单项配置 */
-type GlobalMenuOption = import('naive-ui').MenuOption & {
-  key: string;
-  label: string;
-  routeName: string;
-  routePath: string;
-  icon?: () => import('vue').VNodeChild;
-  children?: GlobalMenuOption[];
-};
-
-/** 面包屑 */
-type GlobalBreadcrumb = import('naive-ui').DropdownOption & {
-  key: string;
-  label: string;
-  disabled: boolean;
-  routeName: string;
-  hasChildren: boolean;
-  children?: GlobalBreadcrumb[];
-};
-
-/** 多页签Tab的路由 */
-interface GlobalTabRoute
-  extends Pick<import('vue-router').RouteLocationNormalizedLoaded, 'name' | 'fullPath' | 'meta'> {
-  /** 滚动的位置 */
-  scrollPosition: {
-    left: number;
-    top: number;
-  };
+declare namespace I18nType {
+  interface Schema {
+    system: {
+      title: string;
+    };
+    routes: {
+      dashboard: {
+        dashboard: string;
+        analysis: string;
+        workbench: string;
+      };
+      about: {
+        about: string;
+      };
+    };
+  }
 }

@@ -34,7 +34,7 @@ interface ImportMetaEnv {
    */
   readonly VITE_AUTH_ROUTE_MODE: 'static' | 'dynamic';
   /** 路由首页的路径 */
-  readonly VITE_ROUTE_HOME_PATH: Exclude<AuthRoute.RoutePath, '/' | '/not-found-page' | '/:pathMatch(.*)*'>;
+  readonly VITE_ROUTE_HOME_PATH: AuthRoute.RoutePath;
   /** iconify图标作为组件的前缀 */
   readonly VITE_ICON_PREFFIX: string;
   /**
@@ -53,6 +53,8 @@ interface ImportMetaEnv {
   readonly VITE_COMPRESS?: 'Y' | 'N';
   /** 压缩算法类型 */
   readonly VITE_COMPRESS_TYPE?: 'gzip' | 'brotliCompress' | 'deflate' | 'deflateRaw';
+  /** 是否应用pwa */
+  readonly VITE_PWA?: 'Y' | 'N';
   /** hash路由模式 */
   readonly VITE_HASH_ROUTE?: 'Y' | 'N';
   /** 是否是部署的vercel */

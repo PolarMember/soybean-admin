@@ -1,6 +1,5 @@
 import type { RouteLocationNormalizedLoaded, RouteRecordNormalized } from 'vue-router';
-import { EnumStorageKey } from '@/enum';
-import { getLocal, setLocal } from '@/utils';
+import { localStg } from '@/utils';
 
 /**
  * 根据vue路由获取tab路由
@@ -9,7 +8,7 @@ import { getLocal, setLocal } from '@/utils';
 export function getTabRouteByVueRoute(route: RouteRecordNormalized | RouteLocationNormalizedLoaded) {
   const fullPath = hasFullPath(route) ? route.fullPath : route.path;
 
-  const tabRoute: GlobalTabRoute = {
+  const tabRoute: App.GlobalTabRoute = {
     name: route.name,
     fullPath,
     meta: route.meta,
@@ -26,7 +25,7 @@ export function getTabRouteByVueRoute(route: RouteRecordNormalized | RouteLocati
  * @param tabs - 多页签数据
  * @param fullPath - 该页签的路径
  */
-export function getIndexInTabRoutes(tabs: GlobalTabRoute[], fullPath: string) {
+export function getIndexInTabRoutes(tabs: App.GlobalTabRoute[], fullPath: string) {
   return tabs.findIndex(tab => tab.fullPath === fullPath);
 }
 
@@ -35,7 +34,7 @@ export function getIndexInTabRoutes(tabs: GlobalTabRoute[], fullPath: string) {
  * @param tabs - 多页签数据
  * @param fullPath - 该页签的路径
  */
-export function isInTabRoutes(tabs: GlobalTabRoute[], fullPath: string) {
+export function isInTabRoutes(tabs: App.GlobalTabRoute[], fullPath: string) {
   return getIndexInTabRoutes(tabs, fullPath) > -1;
 }
 
@@ -44,7 +43,7 @@ export function isInTabRoutes(tabs: GlobalTabRoute[], fullPath: string) {
  * @param tabs - 多页签数据
  * @param routeName - 路由名称
  */
-export function getIndexInTabRoutesByRouteName(tabs: GlobalTabRoute[], routeName: string) {
+export function getIndexInTabRoutesByRouteName(tabs: App.GlobalTabRoute[], routeName: string) {
   return tabs.findIndex(tab => tab.name === routeName);
 }
 
@@ -58,15 +57,10 @@ function hasFullPath(
   return Boolean((route as RouteLocationNormalizedLoaded).fullPath);
 }
 
-/** 缓存多页签数据 */
-export function setTabRoutes(data: GlobalTabRoute[]) {
-  setLocal(EnumStorageKey['multi-tab-routes'], data);
-}
-
 /** 获取缓存的多页签数据 */
 export function getTabRoutes() {
-  const routes: GlobalTabRoute[] = [];
-  const data = getLocal<GlobalTabRoute[]>(EnumStorageKey['multi-tab-routes']);
+  const routes: App.GlobalTabRoute[] = [];
+  const data = localStg.get('multiTabRoutes');
   if (data) {
     const defaultTabRoutes = data.map(item => ({
       ...item,
@@ -82,5 +76,5 @@ export function getTabRoutes() {
 
 /** 清空多页签数据 */
 export function clearTabRoutes() {
-  setTabRoutes([]);
+  localStg.set('multiTabRoutes', []);
 }
